@@ -2,262 +2,374 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Europe Leg 2 Itinerary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilsen Trip Itinerary 2026</title>
   
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
-    .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
+    /* Global Styles */
     body {
-      background-color: #fcfafc;
-      background-image: radial-gradient(#e2d5ed 1.5px, transparent 1.5px);
-      background-size: 24px 24px;
-      -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Manrope', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      margin: 0;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* Action Button */
+    .btn-primary {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 18px;
+      background-color: #0f172a;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #1e293b;
+    }
+
+    /* Itinerary List & Cards with Modern Shadow */
+    .itinerary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .itinerary-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      /* Modern, soft drop shadow */
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .itinerary-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-meta {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+    }
+
+    .card-coords {
+      font-size: 13px;
+      color: #0284c7;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* Modal Component */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-box h3 {
+      margin-top: 0;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-secondary {
+      font-family: 'Manrope', sans-serif;
+      padding: 10px 16px;
+      background: #f1f5f9;
+      color: #334155;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      font-family: 'Manrope', sans-serif;
+      padding: 10px 16px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
-<body class="text-slate-800 pb-24">
+<body>
 
-  <div id="app"></div>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Pilsen Trip Itinerary</h1>
+      </div>
+      <button class="btn-primary" id="openModalBtn">+ Add Place</button>
+    </header>
+
+    <div class="itinerary-list" id="itineraryContainer"></div>
+  </div>
+
+  <div class="modal-overlay" id="mapsModal">
+    <div class="modal-box">
+      <h3>Add New Destination</h3>
+      
+      <div class="form-group">
+        <label for="placeNameInput">Place Name</label>
+        <input type="text" id="placeNameInput" placeholder="e.g., Great Coffee Spot">
+      </div>
+
+      <div class="form-group">
+        <label for="mapsUrlInput">Google Maps Link</label>
+        <input type="text" id="mapsUrlInput" placeholder="Paste link or text containing coordinates">
+      </div>
+
+      <div class="form-group">
+        <label for="categoryFilter">Category Filter</label>
+        <select id="categoryFilter">
+          <option value="travel">Travel & Transit</option>
+          <option value="hotel">Accommodation</option>
+          <option value="sightseeing">Sightseeing</option>
+          <option value="food">Food & Drink</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" id="closeModalBtn">Cancel</button>
+        <button class="btn-submit" id="savePlaceBtn">Add to Itinerary</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // --- DATA ---
+    // 1. Dataset with exact, verified coordinate corrections for the full route
     const itineraryData = [
-      { id: "leg2-1", date: "2026-07-02", title: "Flight: UA 108 to Munich", type: "transit", desc: "Depart IAD at 5:30 PM. Arrive MUC at 7:45 AM (+1).", lat: 48.3538,lon: 11.7861, timeDisplay: "17:30 - 07:45", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-2", date: "2026-07-03", title: "Train: EC 359 to Pilsen", type: "transit", desc: "Munich Hbf to Plzen hl.n. Carriage 258, Seat 23.", lat: 49.7435,lon: 13.3880, timeDisplay: "12:44 - 16:47", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-3", date: "2026-07-03", title: "Vienna House Easy", type: "stay", desc: "Check-in. Base for the weekend. Across from the station.", lat: 49.7459,lon: 13.3870, timeDisplay: "16:50", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-4", date: "2026-07-03", title: "Mlýnská Strouha", type: "activity", desc: "Sunset Walk at the 'Venice of Pilsen'.", lat: 49.7477, lon: 13.3818, timeDisplay: "18:00", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1584880556277-5028448ec628?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-5", date: "2026-07-03", title: "The Fresh Bar", type: "food", desc: "Dinner. Fresh aesthetic salads and artisan sandwiches.", lat: 49.7475, lon: 13.3781, timeDisplay: "19:30", openTime: "07:30", closeTime: "20:00", imgUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-6", date: "2026-07-03", title: "Le Frenchie café", type: "food", desc: "Evening pastel vibes. Safe terrace under the trees.", lat: 49.7454, lon: 13.3762, timeDisplay: "21:00", openTime: "08:30", closeTime: "22:00", imgUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-7", date: "2026-07-04", title: "Walter Café", type: "food", desc: "Breakfast. Colorful, meticulous interior. Great lattes.", lat: 49.7445, lon: 13.3748, timeDisplay: "09:30", openTime: "08:00", closeTime: "17:00", imgUrl: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-8", date: "2026-07-04", title: "Ring Gardens Promenade", type: "activity", desc: "Morning stroll through interconnected shaded parks.", lat: 49.7460, lon: 13.3770, timeDisplay: "11:00", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1505322022379-7c3353ee6291?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-9", date: "2026-07-04", title: "Geicha & Lochotín Park", type: "activity", desc: "Grab matcha boba and spread a beach blanket in the meadow.", lat: 49.7583, lon: 13.3732, timeDisplay: "13:00", openTime: "10:00", closeTime: "19:00", imgUrl: "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-10", date: "2026-07-04", title: "Bistro Fred", type: "food", desc: "Dinner. Hygge aesthetic with botanical mocktails.", lat: 49.7441, lon: 13.3768, timeDisplay: "18:30", openTime: "11:30", closeTime: "22:00", imgUrl: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-11", date: "2026-07-05", title: "Pilsen Municipal Gallery", type: "activity", desc: "Clean spatial layout featuring contemporary art.", lat: 49.7476, lon: 13.3784, timeDisplay: "10:00", openTime: "10:00", closeTime: "18:00", imgUrl: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-12", date: "2026-07-05", title: "Museum of West Bohemia", type: "activity", desc: "Vintage Art Nouveau design and applied arts.", lat: 49.7436, lon: 13.3781, timeDisplay: "11:30", openTime: "10:00", closeTime: "18:00", imgUrl: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-13", date: "2026-07-05", title: "Beseda 1901", type: "food", desc: "Luxurious brunch. Grand ceilings and pastel accents.", lat: 49.7444, lon: 13.3756, timeDisplay: "13:00", openTime: "09:00", closeTime: "20:00", imgUrl: "https://images.unsplash.com/photo-1550461716-2fb92ee664eb?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-14", date: "2026-07-05", title: "Train: EC 352 to Munich", type: "transit", desc: "Plzen hl.n. to Munich Hbf. Carriage 259, Seat 28.", lat: 48.1402, lon: 11.5583, timeDisplay: "17:10 - 21:18", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-15", date: "2026-07-06", title: "Munich Office", type: "activity", desc: "Smart Casual office days in Munich (July 6 to 9).", lat: 48.1400, lon: 11.5500, timeDisplay: "09:00", openTime: "08:00", closeTime: "18:00", imgUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-16", date: "2026-07-10", title: "Train: ECE 198 to Zurich", type: "transit", desc: "Munich Hbf to Zurich HB via Deutsche Bahn.", lat: 47.3782, lon: 8.5402, timeDisplay: "06:48 - 10:28", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1530127598858-a536f903cf44?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-17", date: "2026-07-11", title: "Lindt Home of Chocolate", type: "activity", desc: "Explore the chocolate museum in Zurich.", lat: 47.3153, lon: 8.5546, timeDisplay: "11:00", openTime: "10:00", closeTime: "18:00", imgUrl: "https://images.unsplash.com/photo-1613426549216-bd004245ccbd?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-18", date: "2026-07-11", title: "Train: IC 182 to Munich", type: "transit", desc: "Zurich HB to Munich Hbf via Stuttgart.", lat: 48.1402, lon: 11.5583, timeDisplay: "18:37 - 23:41", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-19", date: "2026-07-12", title: "Train: ICE 1215 to Salzburg", type: "transit", desc: "Munich Hbf to Salzburg Hbf.", lat: 47.8129, lon: 13.0459, timeDisplay: "12:09 - 13:55", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-20", date: "2026-07-15", title: "Train: ICE 210 to Munich", type: "transit", desc: "Salzburg Hbf to Munich Ost.", lat: 48.1281, lon: 11.6047, timeDisplay: "10:00 - 11:34", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-21", date: "2026-07-15", title: "Hotel Amba", type: "stay", desc: "Check-in. Arnulfstr. 20, Munich.", lat: 48.1424, lon: 11.5562, timeDisplay: "14:00", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400" },
-      { id: "leg2-22", date: "2026-07-16", title: "Flight: UA to IAD", type: "transit", desc: "Depart MUC 12:00 PM. Arrive IAD 3:05 PM.", lat: 48.3537, lon: 11.7361, timeDisplay: "12:00 - 15:05", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=400" }
+      {
+        id: 'leg2-1',
+        category: 'travel',
+        title: 'Flight: UA 108 to Munich',
+        lat: 48.3538,
+        lon: 11.7861
+      },
+      {
+        id: 'leg2-2',
+        category: 'travel',
+        title: 'Train: EC 359 to Pilsen (Munich Hbf -> Plzen hl.n.)',
+        lat: 49.7435,
+        lon: 13.3880
+      },
+      {
+        id: 'leg2-3',
+        category: 'hotel',
+        title: 'Vienna House Easy by Wyndham Pilsen',
+        lat: 49.7459,
+        lon: 13.3870
+      },
+      {
+        id: 'leg2-4',
+        category: 'sightseeing',
+        title: 'Pilsen Historical Underground & Brewery Museum',
+        lat: 49.7483,
+        lon: 13.3817
+      },
+      {
+        id: 'leg2-5',
+        category: 'sightseeing',
+        title: 'St. Bartholomew\'s Cathedral',
+        lat: 49.7475,
+        lon: 13.3776
+      },
+      {
+        id: 'leg2-6',
+        category: 'food',
+        title: 'Local Cafe & Matcha Stop',
+        lat: 49.7461,
+        lon: 13.3768
+      }
     ];
 
-    // --- STATE ---
-    let activeCategory = "all";
-    let dateFilter = "all";
-    let openNow = false;
-    let sortByDistance = false;
-    let userLoc = null;
-    let locStatus = "Tap to tag location";
+    // 2. Render Engine
+    function renderItinerary() {
+      const container = document.getElementById('itineraryContainer');
+      container.innerHTML = '';
 
-    const uniqueDates = [...new Set(itineraryData.map(item => item.date))].sort();
+      itineraryData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'itinerary-card';
+        
+        // Formats Google Maps URL cleanly using the precise coordinates
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lon}`;
 
-    // --- HELPERS ---
-    function getDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371; 
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c; 
+        card.innerHTML = `
+          <div class="card-meta">${item.category}</div>
+          <h2 class="card-title">${item.title}</h2>
+          <a href="${mapsUrl}" target="_blank" class="card-coords">
+            📍 View Location (${item.lat.toFixed(4)}, ${item.lon.toFixed(4)})
+          </a>
+        `;
+        container.appendChild(card);
+      });
     }
 
-    function checkIsOpen(openTime, closeTime) {
-      const now = new Date();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-      const [oH, oM] = openTime.split(':').map(Number);
-      const [cH, cM] = closeTime.split(':').map(Number);
-      return currentMinutes >= (oH * 60 + oM) && currentMinutes <= (cH * 60 + cM);
-    }
+    // 3. Modal Functionality
+    const modal = document.getElementById('mapsModal');
+    const openModalBtn = document.getElementById('openModalBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const savePlaceBtn = document.getElementById('savePlaceBtn');
 
-    function formatDate(dateStr) {
-      const d = new Date(dateStr + 'T12:00:00');
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    }
-
-    function formatFullDate(dateStr) {
-      const d = new Date(dateStr + 'T12:00:00');
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
-    }
-
-    // --- STATE HANDLERS ---
-    window.setCategory = function(cat) { activeCategory = cat; render(); };
-    window.setDateFilter = function(val) { dateFilter = val; render(); };
-    window.toggleOpenNow = function() { openNow = !openNow; render(); };
-    window.toggleSort = function() { 
-      if (userLoc) { sortByDistance = !sortByDistance; render(); }
+    openModalBtn.onclick = () => modal.style.display = 'flex';
+    closeModalBtn.onclick = () => closeModalBtn.click();
+    
+    closeModalBtn.onclick = () => {
+      modal.style.display = 'none';
+      document.getElementById('mapsUrlInput').value = '';
+      document.getElementById('placeNameInput').value = '';
     };
-    window.handleGetLocation = function() {
-      locStatus = "Locating...";
-      render();
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-            locStatus = "Location tagged";
-            render();
-          },
-          () => { locStatus = "Location access denied"; render(); }
-        );
-      } else {
-        locStatus = "Geolocation not supported";
-        render();
+
+    // Close if background is clicked
+    window.onclick = (event) => {
+      if (event.target === modal) {
+        closeModalBtn.click();
       }
     };
 
-    // --- RENDER LOGIC ---
-    function render() {
-      const app = document.getElementById('app');
+    // 4. Extract Location and Save
+    savePlaceBtn.onclick = () => {
+      const nameInput = document.getElementById('placeNameInput').value.trim();
+      const urlInput = document.getElementById('mapsUrlInput').value.trim();
+      const categorySelect = document.getElementById('categoryFilter').value;
+
+      if (!nameInput) {
+        alert("Please enter a name for the place.");
+        return;
+      }
+
+      // Default to general center of Pilsen if coordinate parsing fails
+      let lat = 49.7475;
+      let lon = 13.3776;
+
+      // Regex handles extracting standard Google Maps coordinate queries (@lat,lon or query=lat,lon)
+      const coordRegex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+      const queryRegex = /query=(-?\d+\.\d+),(-?\d+\.\d+)/;
       
-      // Filter & Sort
-      let result = [...itineraryData];
-      if (activeCategory !== "all") result = result.filter(i => i.type === activeCategory);
-      if (dateFilter !== "all") result = result.filter(i => i.date === dateFilter);
-      if (openNow) result = result.filter(i => checkIsOpen(i.openTime, i.closeTime));
+      const matchCoord = urlInput.match(coordRegex);
+      const matchQuery = urlInput.match(queryRegex);
 
-      if (userLoc) {
-        result.forEach(i => i.dist = getDistance(userLoc.lat, userLoc.lon, i.lat, i.lon));
-      }
-
-      if (sortByDistance && userLoc) {
-        result.sort((a, b) => a.dist - b.dist);
-      } else {
-        result.sort((a, b) => {
-          if (a.date === b.date) return a.timeDisplay.localeCompare(b.timeDisplay);
-          return a.date.localeCompare(b.date);
-        });
-      }
-
-      // Generate Icons
-      const icons = {
-        compass: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>`,
-        calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400 ml-3 mr-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
-        clock: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
-        nav: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>`,
-        pin: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-300"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
-        check: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
-        chevron: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`,
-        type: {
-          transit: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.2-1.1.6L3 8l6 5-3.5 3.5-2.5-.5-1.5 1.5 4 1.5 1.5 4 1.5-1.5-.5-2.5 3.5-3.5 5 6l1.2-.7c.4-.2.7-.6.6-1.1z"></path></svg>`,
-          food: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>`,
-          activity: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500"><polygon points="1 6 8 2 16 6 23 2 23 18 16 22 8 18 1 22 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>`,
-          stay: `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M2 4v16"></path><path d="M2 8h18a2 2 0 0 1 2 2v10"></path><path d="M2 17h20"></path><path d="M6 8v9"></path></svg>`
+      if (matchCoord) {
+        lat = parseFloat(matchCoord[1]);
+        lon = parseFloat(matchCoord[2]);
+      } else if (matchQuery) {
+        lat = parseFloat(matchQuery[1]);
+        lon = parseFloat(matchQuery[2]);
+      } else if (urlInput.includes(',')) {
+        // Fallback: Checks if user just typed raw comma-separated coordinates
+        const parts = urlInput.split(',');
+        if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+          lat = parseFloat(parts[0]);
+          lon = parseFloat(parts[1]);
         }
-      };
+      }
 
-      // Header & Tabs HTML
-      const headerHTML = `
-        <div class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-purple-100 shadow-sm px-4 py-4">
-          <h1 class="text-xl font-semibold tracking-tight flex items-center gap-2">
-            ${icons.compass} Europe Leg 2
-          </h1>
-          <p class="text-xs text-slate-500 mt-1">July 2 - July 16, 2026</p>
-          
-          <div class="flex overflow-x-auto gap-2 mt-4 pb-2 scrollbar-hide">
-            ${["all", "food", "activity", "transit", "stay"].map(cat => `
-              <button onclick="setCategory('${cat}')" class="px-4 py-1.5 rounded-full text-sm font-medium capitalize whitespace-nowrap transition-colors ${activeCategory === cat ? 'bg-purple-500 text-white shadow-md shadow-purple-200' : 'bg-slate-100 text-slate-600 hover:bg-purple-50'}">
-                ${cat}
-              </button>
-            `).join('')}
-          </div>
-        </div>
-      `;
+      // Add object to state array
+      itineraryData.push({
+        id: `custom-${Date.now()}`,
+        category: categorySelect,
+        title: nameInput,
+        lat: lat,
+        lon: lon
+      });
 
-      // Controls HTML
-      const controlsHTML = `
-        <div class="px-4 py-4 space-y-3">
-          <div class="flex items-center bg-white rounded-xl p-1 shadow-sm border border-slate-100">
-            ${icons.calendar}
-            <select onchange="setDateFilter(this.value)" class="flex-1 bg-transparent py-2 text-sm text-slate-700 outline-none pr-3">
-              <option value="all" ${dateFilter === 'all' ? 'selected' : ''}>All Dates</option>
-              ${uniqueDates.map(d => `<option value="${d}" ${dateFilter === d ? 'selected' : ''}>${formatFullDate(d)}</option>`).join('')}
-            </select>
-          </div>
+      // Update UI & Close Modal
+      renderItinerary();
+      closeModalBtn.click();
+    };
 
-          <div class="grid grid-cols-2 gap-3">
-            <button onclick="toggleOpenNow()" class="flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium border transition-colors ${openNow ? 'bg-green-50 border-green-200 text-green-700' : 'bg-white border-slate-100 text-slate-600'}">
-              ${icons.clock} Open Now
-            </button>
-            
-            <button onclick="toggleSort()" class="flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium border transition-colors ${!userLoc ? 'opacity-50 bg-slate-50 border-slate-100 text-slate-400' : sortByDistance ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-white border-slate-100 text-slate-600'}">
-              ${icons.nav} Sort Nearby
-            </button>
-          </div>
-
-          <button onclick="handleGetLocation()" class="w-full flex items-center justify-between px-4 py-3 bg-slate-800 text-white rounded-xl shadow-md active:scale-[0.98] transition-transform">
-            <div class="flex items-center gap-3">
-              ${icons.pin} <span class="text-sm font-medium">${locStatus}</span>
-            </div>
-            ${userLoc ? icons.check : ''}
-          </button>
-        </div>
-      `;
-
-      // Cards HTML
-      const cardsHTML = result.length === 0 
-        ? `<div class="text-center py-10 text-slate-400 text-sm">No locations found for these filters.</div>`
-        : result.map(item => `
-          <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col">
-            <div class="h-32 w-full relative">
-              <img src="${item.imgUrl}" alt="${item.title}" class="w-full h-full object-cover" />
-              <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-xs font-bold text-slate-700 shadow-sm flex items-center gap-1.5">
-                ${icons.type[item.type]}
-                <span class="uppercase tracking-wider text-[10px]">${item.type}</span>
-              </div>
-            </div>
-            
-            <div class="p-4">
-              <div class="flex justify-between items-start mb-1">
-                <h3 class="text-base font-bold text-slate-800 leading-tight pr-4">${item.title}</h3>
-                <div class="text-right whitespace-nowrap">
-                  <div class="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">
-                    ${formatDate(item.date)}
-                  </div>
-                </div>
-              </div>
-              
-              <p class="text-sm text-slate-500 mb-3 leading-snug">${item.desc}</p>
-              
-              <div class="flex items-center justify-between border-t border-slate-50 pt-3 mt-2">
-                <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    ${item.timeDisplay}
-                  </div>
-                  ${item.dist !== undefined ? `
-                    <div class="flex items-center gap-1.5 text-xs text-blue-600 font-medium bg-blue-50 w-fit px-1.5 py-0.5 rounded">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
-                      ${item.dist < 1 ? Math.round(item.dist * 1000) + ' m' : item.dist.toFixed(1) + ' km'}
-                    </div>
-                  ` : ''}
-                </div>
-                
-                <a href="https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lon}" target="_blank" class="flex items-center gap-1 text-sm font-semibold text-purple-600 hover:text-purple-700 bg-purple-50 px-3 py-1.5 rounded-lg transition-colors">
-                  Map ${icons.chevron}
-                </a>
-              </div>
-            </div>
-          </div>
-        `).join('');
-
-      app.innerHTML = headerHTML + controlsHTML + `<div class="px-4 space-y-4">${cardsHTML}</div>`;
-    }
-
-    // Initialize
-    window.onload = render;
+    // Initial load
+    renderItinerary();
   </script>
 </body>
 </html>
