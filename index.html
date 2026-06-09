@@ -1,0 +1,501 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+  MapPin, Clock, Calendar, Navigation, Coffee, Map, Bed, 
+  Train, Plane, CheckCircle2, ChevronRight, Compass
+} from 'lucide-react';
+
+// --- DATA ---
+const itineraryData = [
+  {
+    id: "leg2-1",
+    date: "2026-07-02",
+    title: "Flight: UA 108 to Munich",
+    type: "transit",
+    desc: "Depart IAD at 5:30 PM. Arrive MUC at 7:45 AM (+1).",
+    lat: 48.3537, lon: 11.7361,
+    timeDisplay: "17:30 - 07:45",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-2",
+    date: "2026-07-03",
+    title: "Train: EC 359 to Pilsen",
+    type: "transit",
+    desc: "Munich Hbf to Plzen hl.n. Carriage 258, Seat 23.",
+    lat: 49.7473, lon: 13.3857,
+    timeDisplay: "12:44 - 16:47",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-3",
+    date: "2026-07-03",
+    title: "Vienna House Easy by Wyndham",
+    type: "stay",
+    desc: "Check-in. Base for the weekend. Across from the station.",
+    lat: 49.7473, lon: 13.3857,
+    timeDisplay: "16:50",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-4",
+    date: "2026-07-03",
+    title: "Mlýnská Strouha",
+    type: "activity",
+    desc: "Sunset Walk at the 'Venice of Pilsen'.",
+    lat: 49.7477, lon: 13.3818,
+    timeDisplay: "18:00",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1584880556277-5028448ec628?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-5",
+    date: "2026-07-03",
+    title: "The Fresh Bar",
+    type: "food",
+    desc: "Dinner. Fresh aesthetic salads and artisan sandwiches.",
+    lat: 49.7475, lon: 13.3781,
+    timeDisplay: "19:30",
+    openTime: "07:30", closeTime: "20:00",
+    imgUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-6",
+    date: "2026-07-03",
+    title: "Le Frenchie café",
+    type: "food",
+    desc: "Evening pastel vibes. Safe terrace under the trees.",
+    lat: 49.7454, lon: 13.3762,
+    timeDisplay: "21:00",
+    openTime: "08:30", closeTime: "22:00",
+    imgUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-7",
+    date: "2026-07-04",
+    title: "Walter Café",
+    type: "food",
+    desc: "Breakfast. Colorful, meticulous interior. Great lattes.",
+    lat: 49.7445, lon: 13.3748,
+    timeDisplay: "09:30",
+    openTime: "08:00", closeTime: "17:00",
+    imgUrl: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-8",
+    date: "2026-07-04",
+    title: "Ring Gardens Promenade",
+    type: "activity",
+    desc: "Morning stroll through interconnected shaded parks.",
+    lat: 49.7460, lon: 13.3770,
+    timeDisplay: "11:00",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1505322022379-7c3353ee6291?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-9",
+    date: "2026-07-04",
+    title: "Geicha & Lochotín Park",
+    type: "activity",
+    desc: "Grab matcha boba and spread a beach blanket in the meadow.",
+    lat: 49.7583, lon: 13.3732,
+    timeDisplay: "13:00",
+    openTime: "10:00", closeTime: "19:00",
+    imgUrl: "https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-10",
+    date: "2026-07-04",
+    title: "Bistro Fred",
+    type: "food",
+    desc: "Dinner. Hygge aesthetic with botanical mocktails.",
+    lat: 49.7441, lon: 13.3768,
+    timeDisplay: "18:30",
+    openTime: "11:30", closeTime: "22:00",
+    imgUrl: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-11",
+    date: "2026-07-05",
+    title: "Pilsen Municipal Gallery",
+    type: "activity",
+    desc: "Clean spatial layout featuring contemporary art.",
+    lat: 49.7476, lon: 13.3784,
+    timeDisplay: "10:00",
+    openTime: "10:00", closeTime: "18:00",
+    imgUrl: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-12",
+    date: "2026-07-05",
+    title: "Museum of West Bohemia",
+    type: "activity",
+    desc: "Vintage Art Nouveau design and applied arts.",
+    lat: 49.7436, lon: 13.3781,
+    timeDisplay: "11:30",
+    openTime: "10:00", closeTime: "18:00",
+    imgUrl: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-13",
+    date: "2026-07-05",
+    title: "Beseda 1901",
+    type: "food",
+    desc: "Luxurious brunch. Grand ceilings and pastel accents.",
+    lat: 49.7444, lon: 13.3756,
+    timeDisplay: "13:00",
+    openTime: "09:00", closeTime: "20:00",
+    imgUrl: "https://images.unsplash.com/photo-1550461716-2fb92ee664eb?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-14",
+    date: "2026-07-05",
+    title: "Train: EC 352 to Munich",
+    type: "transit",
+    desc: "Plzen hl.n. to Munich Hbf. Carriage 259, Seat 28.",
+    lat: 48.1402, lon: 11.5583,
+    timeDisplay: "17:10 - 21:18",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-15",
+    date: "2026-07-06",
+    title: "Munich Office",
+    type: "activity",
+    desc: "Smart Casual office days in Munich (July 6 to 9).",
+    lat: 48.1400, lon: 11.5500,
+    timeDisplay: "09:00",
+    openTime: "08:00", closeTime: "18:00",
+    imgUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-16",
+    date: "2026-07-10",
+    title: "Train: ECE 198 to Zurich",
+    type: "transit",
+    desc: "Munich Hbf to Zurich HB via Deutsche Bahn.",
+    lat: 47.3782, lon: 8.5402,
+    timeDisplay: "06:48 - 10:28",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1530127598858-a536f903cf44?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-17",
+    date: "2026-07-11",
+    title: "Lindt Home of Chocolate",
+    type: "activity",
+    desc: "Explore the chocolate museum in Zurich.",
+    lat: 47.3153, lon: 8.5546,
+    timeDisplay: "11:00",
+    openTime: "10:00", closeTime: "18:00",
+    imgUrl: "https://images.unsplash.com/photo-1613426549216-bd004245ccbd?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-18",
+    date: "2026-07-11",
+    title: "Train: IC 182 to Munich",
+    type: "transit",
+    desc: "Zurich HB to Munich Hbf via Stuttgart.",
+    lat: 48.1402, lon: 11.5583,
+    timeDisplay: "18:37 - 23:41",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-19",
+    date: "2026-07-12",
+    title: "Train: ICE 1215 to Salzburg",
+    type: "transit",
+    desc: "Munich Hbf to Salzburg Hbf.",
+    lat: 47.8129, lon: 13.0459,
+    timeDisplay: "12:09 - 13:55",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-20",
+    date: "2026-07-15",
+    title: "Train: ICE 210 to Munich",
+    type: "transit",
+    desc: "Salzburg Hbf to Munich Ost.",
+    lat: 48.1281, lon: 11.6047,
+    timeDisplay: "10:00 - 11:34",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-21",
+    date: "2026-07-15",
+    title: "Hotel Amba",
+    type: "stay",
+    desc: "Check-in. Arnulfstr. 20, Munich. Double or Twin room.",
+    lat: 48.1424, lon: 11.5562,
+    timeDisplay: "14:00",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&q=80&w=400"
+  },
+  {
+    id: "leg2-22",
+    date: "2026-07-16",
+    title: "Flight: UA to IAD",
+    type: "transit",
+    desc: "Depart MUC 12:00 PM. Arrive IAD 3:05 PM.",
+    lat: 48.3537, lon: 11.7361,
+    timeDisplay: "12:00 - 15:05",
+    openTime: "00:00", closeTime: "23:59",
+    imgUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=400"
+  }
+];
+
+// --- HELPER FUNCTIONS ---
+const getDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Earth radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; 
+};
+
+const checkIsOpen = (openTime, closeTime) => {
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  
+  const [oH, oM] = openTime.split(':').map(Number);
+  const [cH, cM] = closeTime.split(':').map(Number);
+  
+  const openMinutes = oH * 60 + oM;
+  const closeMinutes = cH * 60 + cM;
+  
+  return currentMinutes >= openMinutes && currentMinutes <= closeMinutes;
+};
+
+// --- COMPONENTS ---
+
+export default function App() {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [openNow, setOpenNow] = useState(false);
+  const [sortByDistance, setSortByDistance] = useState(false);
+  const [userLoc, setUserLoc] = useState(null);
+  const [locStatus, setLocStatus] = useState("Tap to tag location");
+
+  // Get unique dates for filter
+  const uniqueDates = [...new Set(itineraryData.map(item => item.date))].sort();
+
+  const handleGetLocation = () => {
+    setLocStatus("Locating...");
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setUserLoc({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+          setLocStatus("Location tagged");
+        },
+        () => setLocStatus("Location access denied")
+      );
+    } else {
+      setLocStatus("Geolocation not supported");
+    }
+  };
+
+  const filteredAndSortedData = useMemo(() => {
+    let result = [...itineraryData];
+
+    // Filter Category
+    if (activeCategory !== "all") {
+      result = result.filter(item => item.type === activeCategory);
+    }
+
+    // Filter Date
+    if (dateFilter !== "all") {
+      result = result.filter(item => item.date === dateFilter);
+    }
+
+    // Filter Open Now
+    if (openNow) {
+      result = result.filter(item => checkIsOpen(item.openTime, item.closeTime));
+    }
+
+    // Distance Calculation & Sorting
+    if (userLoc) {
+      result = result.map(item => ({
+        ...item,
+        dist: getDistance(userLoc.lat, userLoc.lon, item.lat, item.lon)
+      }));
+    }
+
+    if (sortByDistance && userLoc) {
+      result.sort((a, b) => a.dist - b.dist);
+    } else {
+      // Default sort by date and time
+      result.sort((a, b) => {
+        if (a.date === b.date) {
+          return a.timeDisplay.localeCompare(b.timeDisplay);
+        }
+        return a.date.localeCompare(b.date);
+      });
+    }
+
+    return result;
+  }, [activeCategory, dateFilter, openNow, sortByDistance, userLoc]);
+
+  return (
+    <div className="min-h-screen font-sans pb-24" style={{ 
+      backgroundColor: "#fcfafc",
+      backgroundImage: "radial-gradient(#e2d5ed 1.5px, transparent 1.5px)",
+      backgroundSize: "24px 24px"
+    }}>
+      
+      {/* HEADER */}
+      <div className="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-purple-100 shadow-sm px-4 py-4">
+        <h1 className="text-xl font-semibold text-slate-800 tracking-tight flex items-center gap-2">
+          <Compass className="text-purple-400" size={20} />
+          Europe Leg 2
+        </h1>
+        <p className="text-xs text-slate-500 mt-1">July 2 - July 16, 2026</p>
+        
+        {/* CATEGORY TABS */}
+        <div className="flex overflow-x-auto gap-2 mt-4 pb-2 scrollbar-hide">
+          {["all", "food", "activity", "transit", "stay"].map(cat => (
+            <button 
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize whitespace-nowrap transition-colors
+                ${activeCategory === cat 
+                  ? "bg-purple-500 text-white shadow-md shadow-purple-200" 
+                  : "bg-slate-100 text-slate-600 hover:bg-purple-50"}`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* CONTROLS */}
+      <div className="px-4 py-4 space-y-3">
+        {/* Date Selector */}
+        <div className="flex items-center bg-white rounded-xl p-1 shadow-sm border border-slate-100">
+          <Calendar size={18} className="text-purple-400 ml-3 mr-2" />
+          <select 
+            className="flex-1 bg-transparent py-2 text-sm text-slate-700 outline-none pr-3"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+          >
+            <option value="all">All Dates</option>
+            {uniqueDates.map(d => (
+              <option key={d} value={d}>
+                {new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' })}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Toggles */}
+        <div className="grid grid-cols-2 gap-3">
+          <button 
+            onClick={() => setOpenNow(!openNow)}
+            className={`flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium border transition-colors
+              ${openNow ? "bg-green-50 border-green-200 text-green-700" : "bg-white border-slate-100 text-slate-600"}`}
+          >
+            <Clock size={16} />
+            Open Now
+          </button>
+          
+          <button 
+            onClick={() => setSortByDistance(!sortByDistance)}
+            disabled={!userLoc}
+            className={`flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium border transition-colors
+              ${!userLoc ? "opacity-50 bg-slate-50 border-slate-100 text-slate-400" : 
+                sortByDistance ? "bg-blue-50 border-blue-200 text-blue-700" : "bg-white border-slate-100 text-slate-600"}`}
+          >
+            <Navigation size={16} />
+            Sort Nearby
+          </button>
+        </div>
+
+        {/* Location Tagger */}
+        <button 
+          onClick={handleGetLocation}
+          className="w-full flex items-center justify-between px-4 py-3 bg-slate-800 text-white rounded-xl shadow-md active:scale-[0.98] transition-transform"
+        >
+          <div className="flex items-center gap-3">
+            <MapPin size={18} className="text-purple-300" />
+            <span className="text-sm font-medium">{locStatus}</span>
+          </div>
+          {userLoc && <CheckCircle2 size={18} className="text-green-400" />}
+        </button>
+      </div>
+
+      {/* LIST */}
+      <div className="px-4 space-y-4">
+        {filteredAndSortedData.length === 0 ? (
+          <div className="text-center py-10 text-slate-400 text-sm">
+            No locations found for these filters.
+          </div>
+        ) : (
+          filteredAndSortedData.map(item => (
+            <div key={item.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col">
+              <div className="h-32 w-full relative">
+                <img src={item.imgUrl} alt={item.title} className="w-full h-full object-cover" />
+                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-xs font-bold text-slate-700 shadow-sm flex items-center gap-1.5">
+                  {item.type === 'transit' && <Plane size={12} className="text-blue-500" />}
+                  {item.type === 'food' && <Coffee size={12} className="text-orange-500" />}
+                  {item.type === 'activity' && <Map size={12} className="text-emerald-500" />}
+                  {item.type === 'stay' && <Bed size={12} className="text-purple-500" />}
+                  <span className="uppercase tracking-wider text-[10px]">{item.type}</span>
+                </div>
+              </div>
+              
+              <div className="p-4">
+                <div className="flex justify-between items-start mb-1">
+                  <h3 className="text-base font-bold text-slate-800 leading-tight pr-4">
+                    {item.title}
+                  </h3>
+                  <div className="text-right whitespace-nowrap">
+                    <div className="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md">
+                      {new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-slate-500 mb-3 leading-snug">
+                  {item.desc}
+                </p>
+                
+                <div className="flex items-center justify-between border-t border-slate-50 pt-3 mt-2">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-600 font-medium">
+                      <Clock size={14} className="text-slate-400" />
+                      {item.timeDisplay}
+                    </div>
+                    {item.dist !== undefined && (
+                      <div className="flex items-center gap-1.5 text-xs text-blue-600 font-medium bg-blue-50 w-fit px-1.5 py-0.5 rounded">
+                        <Navigation size={12} />
+                        {item.dist < 1 ? `${Math.round(item.dist * 1000)} m` : `${item.dist.toFixed(1)} km`}
+                      </div>
+                    )}
+                  </div>
+                  
+                  <a 
+                    href={`https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lon}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1 text-sm font-semibold text-purple-600 hover:text-purple-700 bg-purple-50 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Map <ChevronRight size={14} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+    </div>
+  );
+}
