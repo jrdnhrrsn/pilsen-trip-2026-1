@@ -6,11 +6,6 @@
   <title>Europe Leg 2 Itinerary</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <style>
     .scrollbar-hide::-webkit-scrollbar {
@@ -25,23 +20,22 @@
       background-image: radial-gradient(#e2d5ed 1.5px, transparent 1.5px);
       background-size: 24px 24px;
       -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
   </style>
 </head>
-<body>
-  <div id="root"></div>
+<body class="text-slate-800 pb-24">
 
-  <script type="text/babel">
-    const { useState, useMemo } = React;
+  <div id="app"></div>
 
-    // --- ICONS (Inline SVGs to replace Lucide imports for standalone use) ---
-    const IconCompass = ({ className, size = 20 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>;
-    const IconCalendar = ({ className, size = 18 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>;
-    const IconClock = ({ className, size = 16 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;
-    const IconNavigation = ({ className, size = 16 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>;
-    const IconMapPin = ({ className, size = 18 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>;
-    const IconCheckCircle = ({ className, size = 18 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
-    const IconPlane = ({ className, size = 12 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.2-1.1.6L3 8l6 5-3.5 3.5-2.5-.5-1.5 1.5 4 1.5 1.5 4 1.5-1.5-.5-2.5 3.5-3.5 5 6l1.2-.7c.4-.2.7-.6.6-1.1z"></path></svg>;
-    const IconCoffee = ({ className, size = 12 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>;
-    const IconMap = ({ className, size = 12 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="1 6 8 2 16 6 23 2 23 18 16 22 8 18 1 22 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>;
-    const IconBed = ({ className, size = 12 }) => <svg xmlns="http://www.w3.org/2000/svg" width={size
+  <script>
+    // --- DATA ---
+    const itineraryData = [
+      { id: "leg2-1", date: "2026-07-02", title: "Flight: UA 108 to Munich", type: "transit", desc: "Depart IAD at 5:30 PM. Arrive MUC at 7:45 AM (+1).", lat: 48.3537, lon: 11.7361, timeDisplay: "17:30 - 07:45", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=400" },
+      { id: "leg2-2", date: "2026-07-03", title: "Train: EC 359 to Pilsen", type: "transit", desc: "Munich Hbf to Plzen hl.n. Carriage 258, Seat 23.", lat: 49.7473, lon: 13.3857, timeDisplay: "12:44 - 16:47", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=400" },
+      { id: "leg2-3", date: "2026-07-03", title: "Vienna House Easy", type: "stay", desc: "Check-in. Base for the weekend. Across from the station.", lat: 49.7473, lon: 13.3857, timeDisplay: "16:50", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=400" },
+      { id: "leg2-4", date: "2026-07-03", title: "Mlýnská Strouha", type: "activity", desc: "Sunset Walk at the 'Venice of Pilsen'.", lat: 49.7477, lon: 13.3818, timeDisplay: "18:00", openTime: "00:00", closeTime: "23:59", imgUrl: "https://images.unsplash.com/photo-1584880556277-5028448ec628?auto=format&fit=crop&q=80&w=400" },
+      { id: "leg2-5", date: "2026-07-03", title: "The Fresh Bar", type: "food", desc: "Dinner. Fresh aesthetic salads and artisan sandwiches.", lat: 49.7475, lon: 13.3781, timeDisplay: "19:30", openTime: "07:30", closeTime: "20:00", imgUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400" },
+      { id: "leg2-6", date: "2026-07-03", title: "Le Frenchie café", type: "food", desc: "Evening pastel vibes. Safe terrace under the trees.", lat: 49.7454, lon: 13.3762, timeDisplay: "21:00", openTime: "08:30", closeTime: "22:00", imgUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=400" },
+      { id: "leg2-7", date: "2026-07-04", title: "Walter Café", type: "food", desc: "Breakfast. Colorful, meticulous interior. Great lattes.", lat: 49.7445, lon: 13.3748, timeDisplay: "09:30", openTime: "08:00", closeTime: "17:00", imgUrl: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=400" },
+      { id: "leg2-8", date: "2026-07-04", title: "Ring Gardens Promenade", type: "activity", desc: "Morning stroll through interconnected shaded parks.", lat: 49.7
